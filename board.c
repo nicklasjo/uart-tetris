@@ -25,3 +25,9 @@ bool is_cell_occupied(Board *b, int x, int y) {
     
 }
 
+void occupy_cell(Board *b, int x, int y) {
+    if (x >= 0 && x < BOARD_WIDTH && y >= 0 && y < BOARD_HEIGHT) {
+        b->cells[y][x] = 1; // Mark the cell as occupied
+    }
+}
+

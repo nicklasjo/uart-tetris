@@ -12,9 +12,9 @@ CFLAGS   = $(MCU) -O2 -Wall -Wextra \
 LDFLAGS  = $(MCU) -T linker.ld \
            -Wl,--gc-sections \
            -Wl,-Map=$(TARGET).map \
-           -nostdlib
+           -nostdlib -lgcc
 
-SRCS = startup.c main.c uart.c led.c systick.c board.c piece.c
+SRCS = startup.c main.c uart.c led.c systick.c board.c piece.c game.c
 OBJS     = $(SRCS:.c=.o)
 
 .PHONY: all flash clean

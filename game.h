@@ -5,6 +5,7 @@
 #include "board.h"
 #include "piece.h"
 
-void piece_at_bottom(Board *b, Piece *p);
+int find_full_lines(Board *b);
+void clear_full_lines(Board *b, int y);
 
 #endif

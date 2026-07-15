@@ -4,6 +4,10 @@
 #include "systick.h"
 #include "board.h"
 #include "piece.h"
+#include "game.h"
+
+#define START_X 4
+#define START_Y 0
 
 
 void game_start(void) {
@@ -30,17 +34,18 @@ int main(void) {
 
     uint8_t o_shape[1][1] = { {1} };
     Piece piece;
-    init_piece(&piece, 4, 0, o_shape);   // O-piece at columns 4-5, rows 0-1
+    init_piece(&piece, START_X, START_Y, o_shape);   // O-piece at columns 4-5, rows 0-1
 
     send_string("\033[2J\033[H");
     draw(&board, &piece);
 
     uint32_t last_drop = millis();
-    const uint32_t drop_interval = 500;  // ms per step down
+    const uint32_t drop_interval = 250;  // ms per step down
     bool redraw = false;
 
     while (1) {
         char received_char;
+
         if (try_receive_char(&received_char)) {
             if (received_char == 'a') move_piece_laterally(&piece, &board, -1);
             else if (received_char == 'd') move_piece_laterally(&piece, &board, 1);
@@ -53,10 +58,23 @@ int main(void) {
             move_piece_down(&piece, &board);
             redraw = true;
         }
+        
+        int full_line_y = find_full_lines(&board);
+        if (full_line_y != -1) {
+            clear_full_lines(&board, full_line_y);
+            redraw = true;
+        }
 
         if (redraw) {
             draw(&board, &piece);
             redraw = false;
         }
+
+        if (piece_has_landed(&piece, &board)) {
+            occupy_cell(&board, piece.x, piece.y);
+            piece.y = START_Y;
+            piece.x = START_X;
+        }
+
     }
 }

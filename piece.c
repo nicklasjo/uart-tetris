@@ -80,3 +80,11 @@ bool move_piece_down(Piece *p, Board *b) {
     return false;                     // no → original untouched, block doesn't move
 }
 
+bool piece_has_landed(Piece *p, Board *b) {
+    Piece moved = *p;                 // copy the whole piece (shape array included)
+    moved.y += 1;                     // shift the copy down
+    return !can_place_piece(&moved, b); // if can't move down, it has landed
+}
+
+
+

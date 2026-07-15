@@ -15,6 +15,6 @@ void init_board(Board *b);
 
 bool is_cell_occupied(Board *b, int x, int y);
 
-
+void occupy_cell(Board *b, int x, int y);
 
 #endif 

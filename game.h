@@ -8,4 +8,5 @@
 int find_full_lines(Board *b);
 void clear_full_lines(Board *b, int y);
 
+
 #endif

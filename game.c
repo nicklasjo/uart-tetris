@@ -12,8 +12,13 @@ int find_full_lines(Board *b) {
 }
 
 void clear_full_lines(Board *b, int y) {
+    for (int row = y; row > 0; row--) {
+        for (int col = 0; col < BOARD_WIDTH; col++) {
+            b->cells[row][col] = b->cells[row - 1][col];
+        }
+    }
     for (int col = 0; col < BOARD_WIDTH; col++) {
-        b->cells[y][col] = 0;
+        b->cells[0][col] = 0;
     }
 }
 

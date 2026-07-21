@@ -10,14 +10,20 @@ typedef struct {
     int x;
     int y;
     int rotation;
-    uint8_t shape[1][1];
+    uint8_t shape[4][4];
 } Piece;
 
-void init_piece(Piece *p, int x, int y, uint8_t shape[1][1]);
+#define NUM_TETROMINOES 7
+
+void init_piece(Piece *p, int x, int y, const uint8_t shape[4][4]);
+void spawn_random_piece(Piece *p, int x, int y);
 bool can_place_piece(Piece *p, Board *b);
 void draw(Board *b, Piece *p);
 bool move_piece_laterally(Piece *p, Board *b, int dx);
 bool move_piece_down(Piece *p, Board *b);
 bool piece_has_landed(Piece *p, Board *b);
+bool move_piece_bottom(Piece *p, Board *b);
+bool rotate_piece(Piece *p, Board *b);
+void lock_piece(Piece *p, Board *b);
 
 #endif

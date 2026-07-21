@@ -5,6 +5,7 @@
 #include "board.h"
 #include "piece.h"
 #include "game.h"
+#include "rng.h"
 
 #define START_X 4
 #define START_Y 0
@@ -32,15 +33,15 @@ int main(void) {
     Board board;
     init_board(&board);
 
-    uint8_t o_shape[1][1] = { {1} };
+    rng_seed(millis());
     Piece piece;
-    init_piece(&piece, START_X, START_Y, o_shape);   // O-piece at columns 4-5, rows 0-1
+    spawn_random_piece(&piece, START_X, START_Y);
 
     send_string("\033[2J\033[H");
     draw(&board, &piece);
 
     uint32_t last_drop = millis();
-    const uint32_t drop_interval = 250;  // ms per step down
+    const uint32_t drop_interval = 500;  // ms per step down
     bool redraw = false;
 
     while (1) {
@@ -49,6 +50,8 @@ int main(void) {
         if (try_receive_char(&received_char)) {
             if (received_char == 'a') move_piece_laterally(&piece, &board, -1);
             else if (received_char == 'd') move_piece_laterally(&piece, &board, 1);
+            else if (received_char == 's') move_piece_bottom(&piece, &board);
+            else if (received_char == ' ') rotate_piece(&piece, &board);
             toggle_led();
             redraw = true;
         }
@@ -71,10 +74,10 @@ int main(void) {
         }
 
         if (piece_has_landed(&piece, &board)) {
-            occupy_cell(&board, piece.x, piece.y);
-            piece.y = START_Y;
-            piece.x = START_X;
+            lock_piece(&piece, &board);
+            spawn_random_piece(&piece, START_X, START_Y);
         }
+        
 
     }
 }

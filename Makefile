@@ -14,7 +14,7 @@ LDFLAGS  = $(MCU) -T linker.ld \
            -Wl,-Map=$(TARGET).map \
            -nostdlib -lgcc
 
-SRCS = startup.c main.c uart.c led.c systick.c board.c piece.c game.c rng.c
+SRCS = startup.c main.c uart.c led.c systick.c board.c piece.c game.c rng.c score.c
 OBJS     = $(SRCS:.c=.o)
 
 .PHONY: all flash clean

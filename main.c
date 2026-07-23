@@ -43,8 +43,8 @@ int main(void) {
     }
     draw_stats(&stats);
 
-    uint32_t last_drop = millis();
-    const uint32_t drop_interval = 500;  // ms per step down
+    float last_drop = (float)millis();
+    float drop_interval = 500;  // ms per step down
     bool redraw = false;
     bool game_over = false;
 
@@ -70,6 +70,7 @@ int main(void) {
         if (full_line_y != -1) {
             clear_full_lines(&board, full_line_y);
             register_line_clear(&stats);    
+            drop_interval = (float)(drop_interval * 0.9); // Increase speed by 10%
             redraw = true;
         }
 

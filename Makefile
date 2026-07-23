@@ -12,7 +12,7 @@ CFLAGS   = $(MCU) -O2 -Wall -Wextra \
 LDFLAGS  = $(MCU) -T linker.ld \
            -Wl,--gc-sections \
            -Wl,-Map=$(TARGET).map \
-           -nostdlib -lgcc
+           -nostdlib
 
 SRCS = startup.c main.c uart.c led.c systick.c board.c piece.c game.c rng.c score.c
 OBJS     = $(SRCS:.c=.o)
@@ -22,8 +22,11 @@ OBJS     = $(SRCS:.c=.o)
 all: $(TARGET).bin
 	$(SIZE) $(TARGET).elf
 
+# -lgcc must come after the object files: ld resolves a static archive in one
+# left-to-right pass, so if it's placed before $^ it gets scanned before any
+# of our undefined symbols (e.g. soft-float helpers) are even known about.
 $(TARGET).elf: $(OBJS)
-	$(CC) $(LDFLAGS) $^ -o $@
+	$(CC) $(LDFLAGS) $^ -lgcc -o $@
 
 %.o: %.c
 	$(CC) $(CFLAGS) -c $< -o $@
